@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  palworld:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: 'ansible_palworld'
+    working_dir: '/palworld_playbooks'
+    volumes:
+      - .:/palworld_playbooks
+      - ${USERPROFILE}/.ssh/az_key.pem:/root/.ssh/az_key.pem
+      - ./ansible.cfg:/root/.ansible.cfg
+    env_file:
+      - ${USERPROFILE}/.azure/credentials
+    tty: true

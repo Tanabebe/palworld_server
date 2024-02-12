@@ -1,0 +1,9 @@
+- hosts: _vm_palworld
+  tasks:
+    - name: Execute a command on Azure VM
+      command: echo "Hello from Azure"
+      register: result
+
+    - name: Display the command result
+      debug:
+        var: result.stdout
