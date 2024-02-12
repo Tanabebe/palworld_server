@@ -13,7 +13,7 @@ Windows前提のためMacは考慮していない
 ### secretの編集
 
 ```bash
-ansible-vault create secret.yml`
+ansible-vault create secret.yml
 ```
 
 ### playbook実行例
