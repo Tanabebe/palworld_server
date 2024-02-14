@@ -49,6 +49,19 @@ resource "azurerm_network_security_group" "palworld_security_group" {
     source_address_prefix      = "*"
     destination_address_prefix = "Internet"
   }
+
+  security_rule {
+    name                       = "${var.base_name}-udp"
+    description                = "Palworld Allow UDP"
+    priority                   = 1003
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "8211"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
 
 resource "azurerm_route_table" "palworld_route_table" {

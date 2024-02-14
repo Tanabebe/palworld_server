@@ -1,5 +1,4 @@
 # Windowsでmakeのインストールをしている前提
-
 .PHONY: tf_plan
 tf_plan:
 	cd terraform && \
@@ -22,11 +21,12 @@ docker_start:
 	cd ansible/docker && \
 	docker compose up -d
 
+.PHONY: docker_in
+docker_in:
+	docker exec -it ansible_palworld bash
+
 .PHONY: docker_delete
 docker_delete:
 	cd ansible/docker && \
 	docker compose down
 
-.PHONY: docker_in
-docker_in:
-	docker exec -it ansible_palworld bash

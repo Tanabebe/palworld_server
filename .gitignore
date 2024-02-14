@@ -40,3 +40,5 @@ terraform.rc
 ansible.log
 *.log
 *.out
+
+ansible/roles/vm/steam/files/**
