@@ -49,10 +49,11 @@ Dockerコンテナに入り`make palworld_ini_update`
 
 ## データの移行
 
-旧サーバーのファイルをコピーしておく<br>
-一度サーバーに入ると`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`が作成されるので、ディレクトリが確認出来たら`sudo systemctl stop palworld`で止める<br>
-旧データの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを新サーバーへコピーする<br>
-コピー先：`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`<br>
-`sudo systemctl start palworld`でサーバー起動
+- 旧サーバーのファイルをコピーしておく
+- 一度サーバーに入ると`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`が作成されるので、ディレクトリが確認出来たら`sudo systemctl stop palworld`で止める
+- 旧データの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを新サーバーへコピーする
+- コピー先
+  - `steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`<br>
+- `sudo systemctl start palworld`でサーバー起動
 
 セーブデータが復元されていたらOKではあるが、マッピングが白紙になってしまう課題がある
