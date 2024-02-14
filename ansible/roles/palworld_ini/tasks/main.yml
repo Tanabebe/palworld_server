@@ -1,0 +1,4 @@
+- name: Copy ini file
+  template:
+    src: "DefaultPalWorldSettings.j2"
+    dest: "{{ ini_file_path }}"

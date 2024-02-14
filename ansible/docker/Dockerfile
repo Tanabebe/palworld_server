@@ -2,7 +2,7 @@ FROM python:slim
 
 RUN apt-get update -y \
     && apt-get install -y openssh-client sshpass \
-    && apt-get install -y --no-install-recommends ca-certificates \
+    && apt-get install -y --no-install-recommends ca-certificates make \
     curl apt-transport-https lsb-release gnupg vim \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /etc/apt/keyrings \
@@ -17,6 +17,7 @@ RUN AZ_DIST=$(lsb_release -cs) \
 RUN pip install --upgrade pip \
     && pip install ansible \
     && ansible-galaxy collection install azure.azcollection --force \
-    && pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt
+    && pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements-azure.txt \
+    && pip install passlib
 
 WORKDIR /palworld_playbooks

@@ -9,8 +9,11 @@ services:
     working_dir: '/palworld_playbooks'
     volumes:
       - .:/palworld_playbooks
-      - ${USERPROFILE}/.ssh/az_key.pem:/root/.ssh/az_key.pem
       - ./ansible.cfg:/root/.ansible.cfg
+      - ${USERPROFILE}/.ssh/az_key.pem:/root/.ssh/az_key.pem
+      - ${USERPROFILE}/ansible/.become_pass:/root/ansible/.become_pass
+      - ${USERPROFILE}/ansible/.vault_pass:/root/ansible/.vault_pass
+
     env_file:
       - ${USERPROFILE}/.azure/credentials
     tty: true

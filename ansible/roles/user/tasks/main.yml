@@ -1,0 +1,12 @@
+- name: Set azureamin password
+  become: yes
+  become_user: root
+  user:
+    name: azureadmin
+    password: "{{ azure.vm.root_password | password_hash('sha512') }}"
+
+- name: Set Suders file
+  become: yes
+  copy:
+    src: "files/90-cloud-init-users"
+    dest: "/etc/sudoers.d/"

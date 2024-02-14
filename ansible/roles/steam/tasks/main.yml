@@ -1,0 +1,39 @@
+# 公式手順のsudo add-apt-repository multiverse
+# - name: Add multiverse repository with expect
+#   become: true
+#   expect:
+#     command: "sudo add-apt-repository multiverse"
+#     # 重要でない箇所はワイルドカード指定が無難そう
+#     # 将来的に文言が変わる可能性があることに留意しておく
+#     responses:
+#       # '(.*)sudo(.*) password for azureadmin: ': '{{ azure.vm.root_password }}'
+#       'Press (.*)ENTER(.*) to continue or Ctrl-c to cancel.': '\n'
+#   args:
+#     chdir: "/home/azureadmin"
+
+# 公式手順のsudo dpkg --add-architecture i386
+# - name: Add i386 architecture
+#   become: true
+#   command: "sudo dpkg --add-architecture i386"
+#   args:
+#     chdir: "/home/azureadmin/"
+
+# - name: Update apt packages
+#   become: true
+#   apt:
+#     update_cache: true
+
+
+# ライセンス同意があるのでSteamCMDインストール時の対話は手動を避けられないっぽいのでここまで来たらSSH接続は必要そう
+# sudo apt install steamcmd
+
+# 上記で展開されたファイルはライセンスに同意しないといけないため、同意後にansible/roles/steam/filesに入れている前提のタスク
+# しかし、このファイルはリポジトリに含めない
+- name: Copy Steam files
+  copy:
+    src: "{{ item }}"
+    dest: "/home/azureadmin/"
+    force: no
+  with_items:
+    - "files/Steam"
+    - "files/steamcmd"

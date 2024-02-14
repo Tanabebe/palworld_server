@@ -1,0 +1,14 @@
+[Unit]
+Description=palworld_sh_agent
+After=network.target
+
+[Service]
+Type=simple
+ExecStart={{ shell_exec_path }}
+ExecStop=/bin/kill ${MAINPID}
+Restart=always
+User={{ user_name }}
+Group={{ user_name }}
+
+[Install]
+WantedBy=multi-user.target

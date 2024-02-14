@@ -1,0 +1,34 @@
+# 起動スクリプトに実行権限を付与
+- name: Ensure PalServer.sh has execute permissions
+  become: true
+  file:
+    path: "/home/azureadmin/Steam/steamapps/common/PalServer/PalServer.sh"
+    mode: "+x"
+
+# systemdユニット配置
+- name: Copy systemd file
+  become: true
+  template:
+    src: "palworld.j2"
+    dest: "/etc/systemd/system/palworld.service"
+
+# 登録したPalworldユニットのスクリプト起動と自動起動ON
+- name: Start the palworld service
+  become: true
+  systemd:
+    name: palworld
+    state: restarted
+    enabled: yes
+
+- name: Reload systemd after changing unit file
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Check the status of palworld service
+  command: systemctl status palworld
+  register: status_output
+
+- name: Display status output
+  debug:
+    var: status_output.stdout_lines

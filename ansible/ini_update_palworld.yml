@@ -1,0 +1,9 @@
+# palworldのiniを修正した場合に実施するタスク
+- name: Server Settings Init
+  hosts: _vm_palworld
+  vars_files:
+    - group_vars/all.yml
+    - group_vars/secret.yml
+  roles:
+    - palworld_ini
+    - systemd
