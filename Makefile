@@ -25,8 +25,8 @@ docker_start:
 docker_in:
 	docker exec -it ansible_palworld bash
 
-.PHONY: docker_delete
-docker_delete:
+.PHONY: docker_stop
+docker_stop:
 	cd ansible/docker && \
 	docker compose down
 
