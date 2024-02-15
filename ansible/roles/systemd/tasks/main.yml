@@ -17,7 +17,7 @@
   become: true
   systemd:
     name: palworld
-    state: restarted
+    state: started
     enabled: yes
 
 - name: Reload systemd after changing unit file

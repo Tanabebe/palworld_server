@@ -1,0 +1,21 @@
+- name: Create temp dir
+  file:
+    path: /tmp/palworld_bk
+    state: directory
+
+- name: Get backup archive save data
+  archive:
+    path: /home/azureadmin/Steam/steamapps/common/PalServer/Pal/Saved/SaveGames
+    dest: /tmp/palworld_bk/save_data_{{ ansible_date_time.date }}.tar.gz
+
+- name: Copy the backup archive to local directory
+  fetch:
+    src: /tmp/palworld_bk/save_data_{{ ansible_date_time.date }}.tar.gz
+    dest: roles/palworld/backup/sav/
+    flat: yes
+
+- name: Remove temporary dir on remote host
+  become: true
+  file:
+    path: /tmp/palworld_bk
+    state: absent

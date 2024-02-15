@@ -5,7 +5,7 @@
     - group_vars/all.yml
     - group_vars/secret.yml
   roles:
-    # - user
-    # - steam
+    - user
+    - steam
     - systemd
-    - palworld_ini
+    - palworld/setting_ini

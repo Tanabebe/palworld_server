@@ -1,0 +1,6 @@
+# Palworldのサーバー停止
+- name: stop the palworld service
+  become: true
+  systemd:
+    name: palworld
+    state: stopped

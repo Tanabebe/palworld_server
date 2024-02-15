@@ -27,7 +27,7 @@ make tf_apply
 # 作成が終わったらプロビジョニング用のコンテナ起動
 make docker_start
 # コンテナに入る
-make docker_cli
+make docker_in
 # コンテナに入ったら
 make palworld_provisioning
 ```
@@ -44,16 +44,21 @@ VMサーバー停止（割り当て解除）：`palworld_stop.bat`
 
 ## iniファイルを変更する
 
+
 公開しても良いパラメーターなら`all.yml`に変数追加や、修正を行う<br>
 Dockerコンテナに入り`make palworld_ini_update`
 
 ## データの移行
 
 - 旧サーバーのファイルをコピーしておく
-- 一度サーバーに入ると`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`が作成されるので、ディレクトリが確認出来たら`sudo systemctl stop palworld`で止める
-- 旧データの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを新サーバーへコピーする
-- コピー先
-  - `steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`<br>
+- リソース作成とプロビジョニングを実施
+- ssh接続でvmへ接続
+- `steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`のディレクトリが確認出来たら
+`sudo systemctl stop palworld`でサーバーを止める
+- 旧データの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを新サーバーの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`へコピーする（SFTPクライアントなどで）
+- ローカルデータをサーバー側へ紐付ける
+  - `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{hash}`にサーバーと紐づいたローカルセーブデータがある
+  - `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{ここを新しいサーバー側のHashに合わせる}`の中へ上記のデータをコピーする
 - `sudo systemctl start palworld`でサーバー起動
 
-セーブデータが復元されていたらOKではあるが、マッピングが白紙になってしまう課題がある
+セーブデータが復元されていたらOK

@@ -42,3 +42,5 @@ ansible.log
 *.out
 
 ansible/roles/steam/files/**
+
+ansible/roles/palworld/backup/sav/**

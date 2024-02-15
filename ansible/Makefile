@@ -9,6 +9,7 @@ palworld_provisioning:
 	--vault-password-file=$(VAULT_PASS) \
 	--e "ansible_become_pass=$(BECOME_PASS)"
 
+# 挙動が怪しい感じもあったので、一応セーブデータのバックアップを取得しておいた方がよさげ
 .PHONY: palworld_ini_update
 palworld_ini_update:
 	ansible-playbook \
