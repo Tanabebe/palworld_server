@@ -16,3 +16,10 @@ palworld_ini_update:
 	-i inventory ini_update_palworld.yml \
 	--vault-password-file=$(VAULT_PASS) \
 	--e "ansible_become_pass=$(BECOME_PASS)"
+
+.PHONY: bk_palworld_savedata
+bk_palworld_savedata:
+	ansible-playbook \
+	-i inventory save_backup.yml \
+	--vault-password-file=$(VAULT_PASS) \
+	--e "ansible_become_pass=$(BECOME_PASS)"
