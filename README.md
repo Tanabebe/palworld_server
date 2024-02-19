@@ -6,9 +6,20 @@ Windows前提のためMacは考慮していない
 
 パルワールド用の専用サーバーをAzure上に構築するためのサーバースタック<br>Windows Serverで構築していたが、サイズが大きいのと値段が少し高いのでUbuntu乗り換え用に作成
 
+## 環境構築
+
+- Makefileのインストール
+  - [こちら](https://gnuwin32.sourceforge.net/packages/make.htm)からインストールを行い`make`コマンドが通るようにする
+- Azure CLIのインストール(Terraformの実行が必要でないならスルーしてOKです)
+  - [こちら](https://learn.microsoft.com/ja-jp/cli/azure/install-azure-cli)を見てセットアップ
+- `cmd_bat/env.bat`の用意
+  - `examplle.env.bat`をコピーしリネーム
+  - 環境変数に何を設定するかは管理者へ問い合わせてください
+
 ## Ansible
 
 前提としてDockerコンテナに入ってから実行
+
 
 ### secretの編集
 
@@ -44,7 +55,6 @@ VMサーバー停止（割り当て解除）：`palworld_stop.bat`
 
 ## iniファイルを変更する
 
-
 公開しても良いパラメーターなら`all.yml`に変数追加や、修正を行う<br>
 Dockerコンテナに入り`make palworld_ini_update`
 
@@ -62,3 +72,7 @@ Dockerコンテナに入り`make palworld_ini_update`
 - `sudo systemctl start palworld`でサーバー起動
 
 セーブデータが復元されていたらOK
+
+## データのバック取得
+
+- サーバーが起動した状態でAnsibleコンテナへ入り（`make docker_in`）ディレクトリ配下の`bk_palworld_savedata`を実行<br>※リポジトリにはあげないため、ローカルに保存されます
