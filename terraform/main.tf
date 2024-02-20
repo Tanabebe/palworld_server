@@ -1,5 +1,4 @@
 resource "azurerm_resource_group" "rg" {
-  # var.resource_group_name_prefix + random_pet
   name     = "${var.base_name}-rg"
   location = var.resource_group_location
 }

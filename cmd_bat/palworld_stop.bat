@@ -10,4 +10,4 @@ call az vm deallocate --resource-group %AZ_RESOURCE_GROUP_MANE% --name %AZ_VM_NA
 
 set TEXT="PalWorldのサーバーを停止しました\nIP: `%PUBLIC_IP%`"
 
-echo {"text":%TEXT%,"channel": "%CHANNEL%","username":%FROM%,"icon_emoji":%ICON_EMOJI%}| nkf -w | curl -k -X POST --data-urlencode payload@- %SLACK_URL%
+call slack_notify.bat %TEXT%
