@@ -24,7 +24,7 @@ resource "azurerm_network_security_group" "palworld_security_group" {
   location            = var.resource_group_location
   resource_group_name = azurerm_resource_group.rg.name
 
-  # リモートデスクトップは自分のIPしか通さない
+  # sshは自分のIPしか通さない
   security_rule {
     name                       = "${var.base_name}-allow-ssh"
     description                = "Palworld Allow SSH"
@@ -33,8 +33,8 @@ resource "azurerm_network_security_group" "palworld_security_group" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "${var.own_public_ip}/32"
+    destination_port_range     = var.ssh_connection_allowed_port
+    source_address_prefixes    = var.ssh_connection_allowed_ip_list
     destination_address_prefix = "*"
   }
 
@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "palworld_security_group" {
     protocol                   = "Udp"
     source_port_range          = "*"
     destination_port_range     = "8211"
-    source_address_prefix      = "*"
+    source_address_prefixes    = var.allowed_server_access_ip_list
     destination_address_prefix = "*"
   }
 }

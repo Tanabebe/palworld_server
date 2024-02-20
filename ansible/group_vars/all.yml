@@ -1,7 +1,14 @@
 guild_player_max_num: 2
 server_player_max_num: 2
 coop_player_max_num: 2
+
+# 卵の孵化時間
 pal_egg_default_hatching_time: 0.0
+
+# jinjaで置換されたiniファイルの置き先
 ini_file_path: "/home/azureadmin/Steam/steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
-shell_exec_path: "/home/azureadmin/Steam/steamapps/common/PalServer/PalServer.sh"
+
+# PalServer.shの引数直すならここ
+shell_exec_path: "/home/azureadmin/Steam/steamapps/common/PalServer/PalServer.sh -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS"
+
 user_name: azureadmin

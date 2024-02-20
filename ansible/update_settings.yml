@@ -6,6 +6,8 @@
     - group_vars/secret.yml
   roles:
     - palworld/server_stop
+    # 必ずバックアップは取得する
     - palworld/backup
-    - palworld/setting_ini
+    - { role: palworld/setting_ini, when: exec_condition == "update_ini_file" }
+    - { role: systemd, when: exec_condition == "update_server_sh" }
     - palworld/server_start

@@ -2,6 +2,7 @@
 BECOME_PASS=$(shell cat $(HOME)/ansible/.become_pass)
 VAULT_PASS=$(HOME)/ansible/.vault_pass
 
+# 初回のプロビジョニング実行
 .PHONY: palworld_provisioning
 palworld_provisioning:
 	ansible-playbook \
@@ -9,17 +10,28 @@ palworld_provisioning:
 	--vault-password-file=$(VAULT_PASS) \
 	--e "ansible_become_pass=$(BECOME_PASS)"
 
-# 挙動が怪しい感じもあったので、一応セーブデータのバックアップを取得しておいた方がよさげ
-.PHONY: palworld_ini_update
-palworld_ini_update:
+# iniファイルの更新
+.PHONY: palworld_update_settings_ini
+palworld_update_settings_ini:
 	ansible-playbook \
-	-i inventory ini_update_palworld.yml \
+	-i inventory update_settings.yml \
+	--vault-password-file=$(VAULT_PASS) \
+	--e "ansible_become_pass=$(BECOME_PASS)" \
+	--e "exec_condition=update_ini_file"
+
+# バックアップデータだけ取得したい場合
+.PHONY: palworld_save_data_backup
+palworld_save_data_backup:
+	ansible-playbook \
+	-i inventory save_data_backup.yml \
 	--vault-password-file=$(VAULT_PASS) \
 	--e "ansible_become_pass=$(BECOME_PASS)"
 
-.PHONY: bk_palworld_savedata
-bk_palworld_savedata:
+#  PalServer.shを更新した場合に流す
+.PHONY: palworld_update_server_sh
+palworld_update_server_sh:
 	ansible-playbook \
-	-i inventory save_backup.yml \
+	-i inventory update_settings.yml \
 	--vault-password-file=$(VAULT_PASS) \
-	--e "ansible_become_pass=$(BECOME_PASS)"
+	--e "ansible_become_pass=$(BECOME_PASS)" \
+	--e "exec_condition=update_server_sh"

@@ -2,11 +2,11 @@
 
 Windows前提のためMacは考慮していない
 
-## 概要
+## 1. 概要
 
 パルワールド用の専用サーバーをAzure上に構築するためのサーバースタック<br>Windows Serverで構築していたが、サイズが大きいのと値段が少し高いのでUbuntu乗り換え用に作成
 
-## 環境構築
+## 2. 実行環境の構築
 
 - Makefileのインストール
   - [こちら](https://gnuwin32.sourceforge.net/packages/make.htm)からインストールを行い`make`コマンドが通るようにする
@@ -16,63 +16,73 @@ Windows前提のためMacは考慮していない
   - `examplle.env.bat`をコピーしリネーム
   - 環境変数に何を設定するかは管理者へ問い合わせてください
 
-## Ansible
-
-前提としてDockerコンテナに入ってから実行
-
-
-### secretの編集
-
-ansibleのsecretに変数増やしたいならこちらで
+## 3. サーバー作成と設定
 
 ```sh
-ansible-vault edit group_vars/secret.yml
-```
-
-### リソース作成とプロビジョニング
-
-```sh
+# 構築されるリソースを確認
 make tf_plan
+
 # 問題なさそうならリソース作成
 make tf_apply
+
 # 作成が終わったらプロビジョニング用のコンテナ起動
 make docker_start
+
 # コンテナに入る
 make docker_in
-# コンテナに入ったら
+
+# コンテナに入ったらプロビジョニング
 make palworld_provisioning
 ```
 
-## サーバー構築後
+## 4. サーバー起動
 
-ディスクのサイズダウンは出来ないので初期少なめの方が良い
+`example.env.bat`を`env.bat`へリネームし、変数を設定する<br>
+※通知用の変数もあるので不要ならコメントアウト
 
-`cmd_bat/example.env.bat`内の変数を設定する<br>
-通知用の変数もあるので不要ならコメントアウト
+- `palworld_start.bat`: VMサーバー起動
+- `palworld_stop.bat`: VMサーバー停止
 
-VMサーバー起動：`palworld_start.bat`<br>
-VMサーバー停止（割り当て解除）：`palworld_stop.bat`
+## 5. Makefile
 
-## iniファイルを変更する
+### 5.1. terraoformとdocker
 
-公開しても良いパラメーターなら`all.yml`に変数追加や、修正を行う<br>
-Dockerコンテナに入り`make palworld_ini_update`
+- `tf_plan`構築されるリソースの確認する
+- `tf_apply`: リソースの作成 
+- `tf_destroy`: リソースの破棄
+- `docker_start`: Ansible実行用のDockerコンテナ起動
+- `docker_in`: Ansible実行用のDockerコンテナへ入る
+- `docker_stop`: Dockerコンテナの破棄
 
-## データの移行
+### 5.2. Ansible
 
-- 旧サーバーのファイルをコピーしておく
-- リソース作成とプロビジョニングを実施
-- ssh接続でvmへ接続
-- `steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`のディレクトリが確認出来たら
-`sudo systemctl stop palworld`でサーバーを止める
-- 旧データの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを新サーバーの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`へコピーする（SFTPクライアントなどで）
-- ローカルデータをサーバー側へ紐付ける
-  - `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{hash}`にサーバーと紐づいたローカルセーブデータがある
-  - `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{ここを新しいサーバー側のHashに合わせる}`の中へ上記のデータをコピーする
-- `sudo systemctl start palworld`でサーバー起動
+Dockerコンテナに入ってから実行
 
-セーブデータが復元されていたらOK
+- `palworld_provisioning`: サーバーのプロビジョニング
+- `palworld_update_settings_ini`: iniファイルの更新
+- `palworld_save_data_backup`: セーブデーターのバックアップ取得
+- `palworld_update_server_sh`: `Palworld.sh`の更新
 
-## データのバック取得
+## 6. Tips
 
-- サーバーが起動した状態でAnsibleコンテナへ入り（`make docker_in`）ディレクトリ配下の`bk_palworld_savedata`を実行<br>※リポジトリにはあげないため、ローカルに保存されます
+### 6.1. データの移行
+
+1. 旧サーバーのファイルをコピーしておく
+2. リソース作成とプロビジョニングを実施
+3. ssh接続でvmへ接続
+   1. `steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`のディレクトリを確認
+   2. `sudo systemctl stop palworld`でサーバーを止める
+   3. 移行元サーバーの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`配下のファイルを<br>移行先サーバーの`steamapps/common/PalServer/Pal/Saved/SaveGames/0/{HashId}/`へコピーする（SFTPクライアントなどで）
+4. ローカルのセーブデータを移行先へ合わせる
+   1. `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{hash}`内にあるファイルをコピー
+   2. `C:\Users\{Your UserName}\AppData\Local\Pal\Saved\{hash}\{移行先サーバー側のHash}`とし、ディレクトリを作成しコピーしたファイルをコピー
+   3. 
+5. `sudo systemctl start palworld`でサーバー起動
+
+ゲームを起動し、セーブデータが復元されていたら完了
+
+### 6.2. リソースの更新
+
+1. terraformのコードを直す
+2. `make tf_plan`で実行計画を確認（しっかり確認する）
+3. `make tf_apply`でリソース更新

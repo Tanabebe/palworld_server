@@ -10,4 +10,4 @@ for /f %%i in ('az vm show --resource-group  %AZ_RESOURCE_GROUP_MANE% --name %AZ
 
 set TEXT="PalWorldのサーバーを起動しました\nIP: `%PUBLIC_IP%`\nServer PASS: `%SERVER_PASS%`"
 
-echo {"text":%TEXT%,"channel": "%CHANNEL%", "username":%FROM%,"icon_emoji":%ICON_EMOJI%}| nkf -w | curl -k -X POST --data-urlencode payload@- %SLACK_URL%
+call slack_notify.bat %TEXT%
